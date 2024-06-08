@@ -1,6 +1,6 @@
 FeatureList
 
-    - View-Klasse, um Attribute zu filtern
-    - API fürs Frontend
-    - SearchMethod innerhalb PokemonApiClient
-    -
+    - API for Frontend
+    - SearchMethod in PokemonApiClient
+    - Create Database and connect with backend
+    - solve todos
