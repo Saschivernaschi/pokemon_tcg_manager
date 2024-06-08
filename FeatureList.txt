@@ -1,0 +1,6 @@
+FeatureList
+
+    - View-Klasse, um Attribute zu filtern
+    - API fürs Frontend
+    - SearchMethod innerhalb PokemonApiClient
+    -

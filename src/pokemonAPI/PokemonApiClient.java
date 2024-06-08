@@ -6,7 +6,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import pokemonAPI.objects.pokemonCard;
+import pokemonAPI.objects.PokemonCard;
 
 public class PokemonApiClient {
 	public static String sendGetRequest(String urlString) throws Exception {
@@ -32,10 +32,10 @@ public class PokemonApiClient {
 			return "GET request not worked";
 		}
 	}
-	public static pokemonCard mapString(String jsonResponse){
+	public static PokemonCard mapString(String jsonResponse){
 		ObjectMapper objectMapper = new ObjectMapper();
 		try {
-            return objectMapper.readValue(jsonResponse, pokemonCard.class);
+            return objectMapper.readValue(jsonResponse, PokemonCard.class);
 		} catch (IOException e) {
 			e.printStackTrace();
 			return null;
