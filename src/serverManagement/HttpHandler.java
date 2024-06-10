@@ -5,6 +5,7 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.net.httpserver.HttpExchange;
@@ -21,46 +22,37 @@ public class HttpHandler implements com.sun.net.httpserver.HttpHandler {
 		int status = 200;
 		String exchangeUri = (String.valueOf(exchange.getRequestURI()));
         String body = null;
-		//TODO: change if conditions and implement all cases to get PokemonCards
-		if ("/cards".startsWith(exchangeUri)){
 
-		} else{
-			switch (exchangeUri){
-				case "/users/registration":
-					break;
-				case "/users/login":
-					break;
-				case "/users/persist":
-					break;
+		//get pokemonCards
+		if ("/cards".startsWith(exchangeUri)){
+			try {
+				body = getPokemonCard(exchange);
+			} catch (Exception e) {
+				status = 404;
+				body = "";
 			}
+		} else {
+			DatabaseManagement.handleUserRequest(exchangeUri);
 		}
 
-		//get PokemonCard
-        try {
-			body = getPokemonCardById(exchange);
-        } catch (Exception e) {
-			status = 404;
-			body = "";
-        }
-
-		byte[] bytes = body.getBytes(charset);
+		// prepare and send response
+		byte[] bytes = Objects.requireNonNull(body).getBytes(charset);
 		int bodyLength = bytes.length;
-
 		exchange.sendResponseHeaders(status, bodyLength);
 
-
+		//print data
 		try (Writer writer = new OutputStreamWriter(exchange.getResponseBody(), charset)) {
 			writer.write(body);
-
 		} catch (IOException e) {
 			System.out.println("Exception thrown.");
 		} finally {
 			exchange.close();
 		}
 	}
-	private static String getPokemonCardById(HttpExchange exchange) throws Exception {
+	private static String getPokemonCard(HttpExchange exchange) throws Exception {
 			String body = PokemonApiClient.sendGetRequest(POKEMON_TCP_URL + String.valueOf(exchange.getRequestURI()));
 			PokemonCard pokemonCard = PokemonApiClient.mapString(body);
+			//simplify pokemonCard
 			SimplifiedPokemonCard simplifiedPokemonCard = new SimplifiedPokemonCard();
 			simplifiedPokemonCard.copyFrom(pokemonCard);
 			return new ObjectMapper().writeValueAsString(simplifiedPokemonCard);

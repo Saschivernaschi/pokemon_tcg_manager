@@ -7,7 +7,6 @@ import java.util.List;
 
 @Getter
 @Setter
-//TODO: id, name, images (link), price,
 public class SimplifiedPokemonCard {
     private String id;
     private String name;
